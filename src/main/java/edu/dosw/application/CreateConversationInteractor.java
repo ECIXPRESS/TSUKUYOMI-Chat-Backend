@@ -1,6 +1,6 @@
 package edu.dosw.application;
 
-import edu.dosw.domain.ports.CreateConversation;
+import edu.dosw.domain.ports.inbound.CreateConversation;
 
 public class CreateConversationInteractor implements CreateConversation {
     @Override

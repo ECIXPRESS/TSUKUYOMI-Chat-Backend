@@ -1,6 +1,6 @@
 package edu.dosw.application;
 
-import edu.dosw.domain.ports.MarkMessageAsReadUseCase;
+import edu.dosw.domain.ports.inbound.MarkMessageAsReadUseCase;
 import org.apache.logging.log4j.message.Message;
 
 public class MarkMessageAsReadService implements MarkMessageAsReadUseCase {

@@ -1,7 +1,7 @@
-package edu.dosw.domain.ports;
+package edu.dosw.domain.ports.inbound;
 
 import org.apache.logging.log4j.message.Message;
 
-public interface SendMessageUseCase {
+public interface MarkMessageAsReadUseCase {
     void execute(Message message);
 }

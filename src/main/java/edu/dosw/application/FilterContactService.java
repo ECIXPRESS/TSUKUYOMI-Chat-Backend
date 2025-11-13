@@ -1,7 +1,7 @@
 package edu.dosw.application;
 
 import edu.dosw.domain.model.User;
-import edu.dosw.domain.ports.FilterContactsUseCase;
+import edu.dosw.domain.ports.inbound.FilterContactsUseCase;
 
 import java.util.List;
 
