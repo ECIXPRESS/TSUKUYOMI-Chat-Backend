@@ -17,7 +17,7 @@ public class GetContactsService implements GetContactsUseCase {
     @Override
     public List<User> execute(String userId) {
         return userRepository.findUserById(userId).getContacts().stream()
-                .map(s -> userRepository.findUserById(s))
+                .map(userRepository::findUserById)
                 .filter(user -> user != null)
                 .toList();
     }

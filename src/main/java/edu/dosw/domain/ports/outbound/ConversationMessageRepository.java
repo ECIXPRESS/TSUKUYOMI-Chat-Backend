@@ -9,6 +9,7 @@ public interface ConversationMessageRepository {
     void saveConversationMessage(ConversationMessage conversationMessage);
     ConversationMessage findMessageById(String messageId);
     List<ConversationMessage> findMessagesByConversationId(String conversationId);
+    List<ConversationMessage> findMessagesByUserId(String userId);
     void updateConversationMessage(ConversationMessage conversationMessage);
     void deleteMessageById(String messageId);
 }

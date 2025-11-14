@@ -52,6 +52,20 @@ public class MongoConversationMessageRepository implements ConversationMessageRe
     }
 
     @Override
+    public List<ConversationMessage> findMessagesByUserId(String userId) {
+        Query query = new Query(
+                Criteria.where("author_id").is(userId)
+        ).with(Sort.by(Sort.Direction.ASC, "send_date"));
+
+        List<ConversationMessageDocument> docs =
+                mongoTemplate.find(query, ConversationMessageDocument.class);
+
+        return docs.stream()
+                .map(mapper::toDomain)
+                .toList();
+    }
+
+    @Override
     public void updateConversationMessage(ConversationMessage message) {
         mongoTemplate.save(mapper.toDocument(message));
     }
