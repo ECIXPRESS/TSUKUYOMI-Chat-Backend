@@ -1,7 +1,7 @@
 package edu.dosw.domain.ports.inbound;
 
-import org.apache.logging.log4j.message.Message;
+import edu.dosw.domain.model.ConversationMessage;
 
 public interface MarkMessageAsReadUseCase {
-    void execute(Message message);
+    void execute(ConversationMessage message);
 }

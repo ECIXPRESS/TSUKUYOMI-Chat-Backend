@@ -11,11 +11,11 @@ public abstract class ConversationMessage {
     private Boolean isRead;
     private String text;
     private String author; //UserId
-    private String conversation;
+    private String conversationId;
 
-    protected ConversationMessage(String id,String conversation, Date sendDate, String text, String author){
+    protected ConversationMessage(String id,String conversationId, Date sendDate, String text, String author){
         this.id = id;
-        this.conversation = conversation;
+        this.conversationId = conversationId;
         this.sendDate = sendDate;
         this.text = text;
         this.author = author;
@@ -31,5 +31,7 @@ public abstract class ConversationMessage {
     }
 
 
-
+    public String getConversationId() {
+        return conversationId;
+    }
 }
