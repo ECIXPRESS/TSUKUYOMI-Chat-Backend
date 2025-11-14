@@ -34,4 +34,21 @@ public abstract class ConversationMessage {
     public String getConversationId() {
         return conversationId;
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Date getSendDate() {
+        return sendDate;
+    }
+
+    public boolean getIsRead() {
+        return isRead;
+    }
+
 }

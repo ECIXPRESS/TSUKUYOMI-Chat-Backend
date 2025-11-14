@@ -55,13 +55,14 @@ public class Conversation {
         users.removeIf(u -> u.getId().equals(userId));
     }
     public void userSendMessage(ConversationMessage message){
-            User sender = users.stream().filter(u -> u.getId().equals(message.getAuthor())).findFirst().orElse(null);
-            if(sender != null){
-                sender.addMessage(message);
+            if(users.stream().filter(u -> u.getId().equals(message.getAuthor())).findFirst().orElse(null) != null){
                 addMessage(message);
             }else{
                 //exception
             }
     }
 
+    public Date getCreationDate() {
+        return creationDate;
+    }
 }

@@ -7,31 +7,31 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-@Document(collection = "users")
+
+@Document(collection = "conversationmessages")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserDocument {
+public class ConversationMessageDocument{
 
     @Id
     private String id;
 
-    @Field("name")
-    private String name;
+    @Field("conversation_id")
+    private String conversationId;
 
-    @Field("profile_photo")
-    private String profilePhoto;
+    @Field("send_date")
+    private Date sendDate;
 
-    @Field("is_active")
-    private boolean isActive;
+    @Field("author_id")
+    private String authorId;
 
-    @Field("conversations")
-    private List<String> conversations;
+    @Field("text")
+    private String text;
 
-    @Field("contacts")
-    private List<String> contacts;
+    @Field("is_read")
+    private boolean isRead;
 
 }

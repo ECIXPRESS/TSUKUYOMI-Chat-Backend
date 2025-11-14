@@ -1,21 +1,33 @@
 package edu.dosw.infrastructure.persistence.mongodb.documents;
 
-import edu.dosw.domain.model.ConversationMessage;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.Date;
 import java.util.List;
 
+@Document(collection = "conversations")
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
-public class ConversationDocument {
+public class ConversationDocument{
+
+    @Id
     private String id;
-    private List<String> usersIds;
-    private List<ConversationMessage> messages;
 
-    public ConversationDocument(String id, List<String> usersIds, List<ConversationMessage> messages) {
-        this.id = id;
-        this.usersIds = usersIds;
-        this.messages = messages;
-    }
+    @Field("creation_date")
+    private Date creationDate;
 
+    @Field("users")
+    private List<String> participants;
+
+    @Field("messages")
+    private List<String> messages;
+
+    @Field("last_updated")
+    private Date lastUpdated;
 }
-
