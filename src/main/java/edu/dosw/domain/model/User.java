@@ -2,7 +2,9 @@ package edu.dosw.domain.model;
 
 import org.apache.logging.log4j.message.Message;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
@@ -15,15 +17,15 @@ public class User {
     private List<Conversation> conversations;
     private List<String> contacts;
 
-    public User(String id, String name, String profilePhoto, Boolean isActive, List<Conversation> conversations,List<String> contacts){
-        this.id = id;
+    public User( String name, String profilePhoto){
+        id = UUID.randomUUID().toString();
         this.name = name;
         this.profilePhoto = profilePhoto;
-        this.isActive = isActive;
-        this.conversations = conversations;
-
-        this.contacts = contacts;
+        isActive = false;
+        conversations = new ArrayList<>();
+        contacts = new ArrayList<>();
     }
+
     public void addConversation(Conversation conversation){
         conversations.add(conversation);
     }
@@ -51,7 +53,7 @@ public class User {
 
     public void removeConversation(String conversationId) {
         conversations = conversations.stream()
-                .filter(id -> !id.equals(conversationId))
+                .filter(c -> !c.getId().equals(conversationId))
                 .collect(Collectors.toList());
     }
 

@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ConversationDocument{
     private String id;
 
     @Field("creation_date")
-    private Date creationDate;
+    private Instant creationDate;
 
     @Field("users")
     private List<String> participants;

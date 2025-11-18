@@ -1,5 +1,7 @@
 package edu.dosw.domain.ports.inbound;
 
+import edu.dosw.domain.ports.inbound.command.DeleteConversationCommand;
+
 public interface DeleteConversationUseCase {
-    void execute(String conversationId, String userId);
+    void execute(DeleteConversationCommand deleteConversationCommand);
 }

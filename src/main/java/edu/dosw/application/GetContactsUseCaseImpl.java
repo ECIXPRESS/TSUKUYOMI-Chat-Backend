@@ -5,12 +5,13 @@ import edu.dosw.domain.ports.inbound.GetContactsUseCase;
 import edu.dosw.domain.ports.outbound.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
 
-public class GetContactsService implements GetContactsUseCase {
+public class GetContactsUseCaseImpl implements GetContactsUseCase {
 
     private final UserRepository userRepository;
 
-    public GetContactsService(UserRepository userRepository) {
+    public GetContactsUseCaseImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -18,7 +19,7 @@ public class GetContactsService implements GetContactsUseCase {
     public List<User> execute(String userId) {
         return userRepository.findUserById(userId).getContacts().stream()
                 .map(userRepository::findUserById)
-                .filter(user -> user != null)
+                .filter(Objects::nonNull)
                 .toList();
     }
 }

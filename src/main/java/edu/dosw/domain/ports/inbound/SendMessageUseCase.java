@@ -1,8 +1,8 @@
 package edu.dosw.domain.ports.inbound;
 
 import edu.dosw.domain.model.ConversationMessage;
-import org.apache.logging.log4j.message.Message;
+import edu.dosw.domain.ports.inbound.command.SendConversationMessageCommand;
 
 public interface SendMessageUseCase {
-    void execute(ConversationMessage message);
+    ConversationMessage execute(SendConversationMessageCommand message);
 }

@@ -19,18 +19,15 @@ public class MongoConversationRepository implements ConversationRepository {
 
     private final MongoTemplate mongoTemplate;
     private final ConversationMapper conversationMapper;
-    private final java.util.function.Function<String, User> findUser;
     private final java.util.function.Function<String, ConversationMessage> findMessage;
 
     public MongoConversationRepository(
             MongoTemplate mongoTemplate,
             ConversationMapper mapper,
-            UserRepository userRepository,
             ConversationMessageRepository messageRepository
     ) {
         this.mongoTemplate = mongoTemplate;
         this.conversationMapper = mapper;
-        this.findUser = userRepository::findUserById;
         this.findMessage = messageRepository::findMessageById;
     }
 
@@ -48,7 +45,7 @@ public class MongoConversationRepository implements ConversationRepository {
         if (doc == null) {
             //exception
         }
-        return conversationMapper.toDomain(doc, findUser, findMessage);
+        return conversationMapper.toDomain(doc, findMessage);
     }
 
     @Override
@@ -57,7 +54,7 @@ public class MongoConversationRepository implements ConversationRepository {
                 mongoTemplate.findAll(ConversationDocument.class);
 
         return documents.stream()
-                .map(doc -> conversationMapper.toDomain(doc, findUser, findMessage))
+                .map(doc -> conversationMapper.toDomain(doc, findMessage))
                 .toList();
     }
 
@@ -73,7 +70,7 @@ public class MongoConversationRepository implements ConversationRepository {
 
         if (doc == null) return null;
 
-        return conversationMapper.toDomain(doc, findUser, findMessage);
+        return conversationMapper.toDomain(doc,findMessage);
     }
 
     @Override

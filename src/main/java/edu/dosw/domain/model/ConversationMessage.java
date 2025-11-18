@@ -1,22 +1,21 @@
 package edu.dosw.domain.model;
 
-import lombok.AllArgsConstructor;
-
-import java.util.Date;
+import java.time.Instant;
+import java.util.UUID;
 
 
 public abstract class ConversationMessage {
     private String id;
-    private Date sendDate;
+    private Instant sendDate;
     private Boolean isRead;
     private String text;
     private String author; //UserId
     private String conversationId;
 
-    protected ConversationMessage(String id,String conversationId, Date sendDate, String text, String author){
-        this.id = id;
+    protected ConversationMessage(String conversationId, String text, String author){
+        id = UUID.randomUUID().toString();
         this.conversationId = conversationId;
-        this.sendDate = sendDate;
+        sendDate = Instant.now();
         this.text = text;
         this.author = author;
         isRead = false;
@@ -43,7 +42,7 @@ public abstract class ConversationMessage {
         return id;
     }
 
-    public Date getSendDate() {
+    public Instant getSendDate() {
         return sendDate;
     }
 

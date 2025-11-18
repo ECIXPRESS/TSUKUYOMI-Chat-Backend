@@ -5,13 +5,14 @@ import edu.dosw.domain.ports.inbound.FilterContactsUseCase;
 import edu.dosw.domain.ports.outbound.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class FilterContactService implements FilterContactsUseCase {
+public class FilterContactUseCaseImpl implements FilterContactsUseCase {
 
     private final UserRepository userRepository;
 
-    public FilterContactService(UserRepository userRepository) {
+    public FilterContactUseCaseImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -20,8 +21,8 @@ public class FilterContactService implements FilterContactsUseCase {
         return userRepository.findUserById(userId)
                 .getContacts()
                 .stream()
-                .map(contactId -> userRepository.findUserById(contactId))
-                .filter(user -> user != null)
+                .map(userRepository::findUserById)
+                .filter(Objects::nonNull)
                 .filter(user -> user.getName().contains(filterWord))
                 .collect(Collectors.toList());
     }

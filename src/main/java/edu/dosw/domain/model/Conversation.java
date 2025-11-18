@@ -1,24 +1,30 @@
 package edu.dosw.domain.model;
 
-import org.apache.logging.log4j.message.Message;
-
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class Conversation {
-    private String id;
-    private Date creationDate;
+    private final String id;
+    private final Instant creationDate;
     private List<ConversationMessage> messages;
-    private List<User> users;
+    private List<String> users;
 
-    public Conversation(String id,Date creationDate,List<String> usersIds){
-        this.id = id;
-        this.creationDate = creationDate;
+    public Conversation(List<String> users){
+        id = UUID.randomUUID().toString();
+        creationDate = Instant.now();
         this.users = users;
+        messages = new ArrayList<>();
     }
 
-    public void addUser(User user){
-        users.add(user);
+    public void addUser(String userId){
+        if(users.stream().anyMatch(s -> s.equals(userId))){
+            //no se puede agregar
+        }
+        users.add(userId);
     }
     public void addMessage(ConversationMessage message){
         if(getUsersIds().contains(message.getAuthor())){
@@ -34,17 +40,12 @@ public class Conversation {
             // exception
         }
     }
-
     public String getId() {
         return id;
     }
 
-    public List<User> getUsers(){
-        return users;
-    }
-
     public List<String> getUsersIds() {
-        return users.stream().map(user -> user.getId()).toList();
+        return users;
     }
 
     public List<ConversationMessage> getMessages() {
@@ -52,17 +53,17 @@ public class Conversation {
     }
 
     public void removeUser(String userId) {
-        users.removeIf(u -> u.getId().equals(userId));
+        users.removeIf(u -> u.equals(userId));
     }
     public void userSendMessage(ConversationMessage message){
-            if(users.stream().filter(u -> u.getId().equals(message.getAuthor())).findFirst().orElse(null) != null){
+            if(users.stream().filter(u -> u.equals(message.getAuthor())).findFirst().orElse(null) != null){
                 addMessage(message);
             }else{
                 //exception
             }
     }
 
-    public Date getCreationDate() {
+    public Instant getCreationDate() {
         return creationDate;
     }
 }

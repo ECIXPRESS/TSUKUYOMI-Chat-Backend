@@ -14,16 +14,13 @@ public class ConversationMapper {
 
     public Conversation toDomain(
             ConversationDocument doc,
-            Function<String, User> findUser,
             Function<String, ConversationMessage> findMessage
     ) {
         if (doc == null) return null;
 
-        List<User> users = doc.getParticipants() == null
-                ? List.of()
-                : doc.getParticipants().stream()
-                .map(findUser)
-                .toList();
+        List<String> users = doc.getParticipants() == null
+                ? List.of() //should be exception
+                : doc.getParticipants();
 
         List<ConversationMessage> messages = doc.getMessages() == null
                 ? List.of()
@@ -32,8 +29,6 @@ public class ConversationMapper {
                 .toList();
 
         Conversation conversation = new Conversation(
-                doc.getId(),
-                doc.getCreationDate(),
                 doc.getParticipants()
         );
 
