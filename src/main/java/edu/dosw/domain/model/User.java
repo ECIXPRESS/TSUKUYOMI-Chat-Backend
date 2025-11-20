@@ -1,24 +1,21 @@
 package edu.dosw.domain.model;
 
-import org.apache.logging.log4j.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
 
 public class User {
-    private String id;
+    private final String id;
     private String name;
     private String profilePhoto;
     private Boolean isActive;
     private List<String> conversations;
     private List<String> contacts;
 
-
     public User(String userId,String name, String profilePhoto){
+        this.id = userId;
         this.name = name;
         this.profilePhoto = profilePhoto;
         isActive = false;
@@ -30,7 +27,8 @@ public class User {
         this.id = userId;
         this.name = name;
         this.profilePhoto = profilePhoto;
-
+        this.conversations = conversations;
+        this.contacts = contacts;
     }
 
     public void addConversation(String conversationId){
