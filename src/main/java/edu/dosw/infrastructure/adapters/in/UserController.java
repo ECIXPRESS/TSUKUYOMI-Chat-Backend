@@ -3,10 +3,13 @@ package edu.dosw.infrastructure.adapters.in;
 import edu.dosw.domain.model.User;
 import edu.dosw.domain.ports.inbound.FilterContactsUseCase;
 import edu.dosw.domain.ports.inbound.GetContactsUseCase;
+import edu.dosw.domain.ports.inbound.GetConversationsUseCase;
 import edu.dosw.domain.ports.inbound.GetUserMessagesInConversationUseCase;
 import edu.dosw.infrastructure.adapters.in.dtos.ConversationMessageResponse;
+import edu.dosw.infrastructure.adapters.in.dtos.ConversationResponse;
 import edu.dosw.infrastructure.adapters.in.dtos.UserResponse;
 import edu.dosw.infrastructure.adapters.in.mappers.ConversationMessageWebMapper;
+import edu.dosw.infrastructure.adapters.in.mappers.ConversationWebMapper;
 import edu.dosw.infrastructure.adapters.in.mappers.UserWebMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,8 @@ public class UserController {
     private final GetContactsUseCase getContactsUseCase;
     private final GetUserMessagesInConversationUseCase getUserMessagesInConversationUseCase;
     private final ConversationMessageWebMapper conversationMessageWebMapper;
+    private final ConversationWebMapper conversationWebMapper;
+    private final GetConversationsUseCase getConversationsUseCase;
 
     @GetMapping("/{id}/contacts")
     public List<UserResponse> getContacts(@PathVariable String id, String filterWord) {
@@ -45,6 +50,11 @@ public class UserController {
     @GetMapping("/{id}/messages")
     public List<ConversationMessageResponse> getMessages(@PathVariable String id,String conversationId) {
         return getUserMessagesInConversationUseCase.execute(id,conversationId).stream().map(conversationMessageWebMapper::toResponse).toList();
+    }
+
+    @GetMapping("/{id}/conversations")
+    public List<ConversationResponse> getConversationsOfUser(@PathVariable String id){
+        return getConversationsUseCase.execute(id).stream().map(conversationWebMapper::toResponse).toList();
     }
 
 }

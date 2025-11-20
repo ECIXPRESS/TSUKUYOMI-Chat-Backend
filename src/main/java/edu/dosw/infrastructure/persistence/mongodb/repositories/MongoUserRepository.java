@@ -15,13 +15,10 @@ import java.util.List;
 public class MongoUserRepository implements UserRepository {
     private final MongoTemplate mongoTemplate;
     private final UserMapper userMapper;
-    private final java.util.function.Function<String, Conversation> findConversation;
 
-
-    public MongoUserRepository(MongoTemplate mongoTemplate, UserMapper userMapper, ConversationRepository conversationRepository) {
+    public MongoUserRepository(MongoTemplate mongoTemplate, UserMapper userMapper) {
         this.mongoTemplate = mongoTemplate;
         this.userMapper = userMapper;
-        this.findConversation = conversationRepository ::findConversationById;
     }
 
     @Override
@@ -32,7 +29,7 @@ public class MongoUserRepository implements UserRepository {
     @Override
     public List<User> listUsers() {
         return mongoTemplate.findAll(UserDocument.class).stream()
-                .map(userDocument -> userMapper.toDomain(userDocument, findConversation))
+                .map(userMapper::toDomain)
                 .toList();
     }
 
@@ -46,7 +43,7 @@ public class MongoUserRepository implements UserRepository {
     public User findUserById(String userId) {
         UserDocument doc = mongoTemplate.findById(userId, UserDocument.class);
         if (doc == null) return null;
-        return userMapper.toDomain(doc, findConversation);
+        return userMapper.toDomain(doc);
     }
 
     @Override

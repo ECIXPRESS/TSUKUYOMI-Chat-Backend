@@ -3,6 +3,8 @@ package edu.dosw.infrastructure.adapters.in.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Data
 @AllArgsConstructor
 public class ConversationMessageResponse {
@@ -10,5 +12,6 @@ public class ConversationMessageResponse {
     private String conversationId;
     private String authorId;
     private String content;
-    private long timestamp;
+    private Instant creationDate;
+    private Boolean isRead;
 }

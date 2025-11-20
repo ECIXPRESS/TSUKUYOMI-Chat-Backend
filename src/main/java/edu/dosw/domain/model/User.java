@@ -14,11 +14,11 @@ public class User {
     private String name;
     private String profilePhoto;
     private Boolean isActive;
-    private List<Conversation> conversations;
+    private List<String> conversations;
     private List<String> contacts;
 
-    public User( String name, String profilePhoto){
-        id = UUID.randomUUID().toString();
+
+    public User(String userId,String name, String profilePhoto){
         this.name = name;
         this.profilePhoto = profilePhoto;
         isActive = false;
@@ -26,8 +26,15 @@ public class User {
         contacts = new ArrayList<>();
     }
 
-    public void addConversation(Conversation conversation){
-        conversations.add(conversation);
+    public User(String userId,String name, String profilePhoto, List<String> conversations,List<String> contacts ){
+        this.id = userId;
+        this.name = name;
+        this.profilePhoto = profilePhoto;
+
+    }
+
+    public void addConversation(String conversationId){
+        conversations.add(conversationId);
     }
 
     public String getName(){
@@ -46,14 +53,14 @@ public class User {
         this.profilePhoto = profilePhoto;
     }
 
-    public List<Conversation> getConversations(){
+    public List<String> getConversations(){
         return conversations;
     }
 
 
     public void removeConversation(String conversationId) {
         conversations = conversations.stream()
-                .filter(c -> !c.getId().equals(conversationId))
+                .filter(c -> !c.equals(conversationId))
                 .collect(Collectors.toList());
     }
 

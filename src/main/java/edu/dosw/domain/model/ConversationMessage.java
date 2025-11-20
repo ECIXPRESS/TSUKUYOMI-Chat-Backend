@@ -20,6 +20,14 @@ public abstract class ConversationMessage {
         this.author = author;
         isRead = false;
     }
+    protected ConversationMessage(String id, String conversationId, String author, String text, Instant sendDate, Boolean isRead) {
+        this.id = id;
+        this.conversationId = conversationId;
+        this.author = author;
+        this.text = text;
+        this.sendDate = sendDate;
+        this.isRead = isRead;
+    }
 
     public void markRead(){
         isRead = true;
@@ -46,7 +54,7 @@ public abstract class ConversationMessage {
         return sendDate;
     }
 
-    public boolean getIsRead() {
+    public Boolean getIsRead() {
         return isRead;
     }
 

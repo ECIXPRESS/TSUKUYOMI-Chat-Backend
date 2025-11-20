@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.Instant;
 import java.util.Date;
 
 
@@ -23,7 +24,7 @@ public class ConversationMessageDocument{
     private String conversationId;
 
     @Field("send_date")
-    private Date sendDate;
+    private Instant sendDate;
 
     @Field("author_id")
     private String authorId;
@@ -32,6 +33,6 @@ public class ConversationMessageDocument{
     private String text;
 
     @Field("is_read")
-    private boolean isRead;
+    private Boolean isRead;
 
 }

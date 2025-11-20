@@ -15,7 +15,8 @@ public class ConversationMessageWebMapper {
                 message.getConversationId(),
                 message.getAuthor(),
                 message.getText(),
-                message.getSendDate().toEpochMilli()
+                message.getSendDate(),
+                message.getIsRead()
         );
     }
 }

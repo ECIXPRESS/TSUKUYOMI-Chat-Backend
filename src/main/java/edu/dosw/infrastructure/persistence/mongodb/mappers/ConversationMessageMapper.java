@@ -16,7 +16,7 @@ public class ConversationMessageMapper {
         doc.setAuthorId(message.getAuthor());
         doc.setText(message.getText());
         doc.setSendDate(message.getSendDate());
-        doc.setRead(message.getIsRead());
+        doc.setIsRead(message.getIsRead());
         return doc;
     }
 
@@ -26,9 +26,10 @@ public class ConversationMessageMapper {
         return new ConversationMessage(
                 doc.getId(),
                 doc.getConversationId(),
-                doc.getSendDate(),
+                doc.getAuthorId(),
                 doc.getText(),
-                doc.getAuthorId()
+                doc.getSendDate(),
+                doc.getIsRead()
         ) {
         };
     }
