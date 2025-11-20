@@ -9,11 +9,12 @@ COPY src ./src
 
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:17-jre   # Usamos JRE, más liviano que JDK
+
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080   # Cambia si tu app usa otro puerto
+EXPOSE 8085
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
