@@ -1,10 +1,7 @@
 package edu.dosw.infrastructure.adapters.in;
 
-import edu.dosw.domain.model.User;
-import edu.dosw.domain.ports.inbound.FilterContactsUseCase;
-import edu.dosw.domain.ports.inbound.GetContactsUseCase;
-import edu.dosw.domain.ports.inbound.GetConversationsUseCase;
-import edu.dosw.domain.ports.inbound.GetUserMessagesInConversationUseCase;
+import edu.dosw.domain.ports.inbound.*;
+import edu.dosw.infrastructure.adapters.in.dtos.AddContactRequest;
 import edu.dosw.infrastructure.adapters.in.dtos.ConversationMessageResponse;
 import edu.dosw.infrastructure.adapters.in.dtos.ConversationResponse;
 import edu.dosw.infrastructure.adapters.in.dtos.UserResponse;
@@ -12,10 +9,7 @@ import edu.dosw.infrastructure.adapters.in.mappers.ConversationMessageWebMapper;
 import edu.dosw.infrastructure.adapters.in.mappers.ConversationWebMapper;
 import edu.dosw.infrastructure.adapters.in.mappers.UserWebMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,8 +26,9 @@ public class UserController {
     private final ConversationMessageWebMapper conversationMessageWebMapper;
     private final ConversationWebMapper conversationWebMapper;
     private final GetConversationsUseCase getConversationsUseCase;
+    private final AddContactUseCase addContactUseCase;
 
-    @GetMapping("/{id}/contacts")
+    @GetMapping("/{id}/filter/contacts")
     public List<UserResponse> getContacts(@PathVariable String id, String filterWord) {
         return filterContactsUseCase.execute(id,filterWord)
                 .stream()
@@ -57,4 +52,8 @@ public class UserController {
         return getConversationsUseCase.execute(id).stream().map(conversationWebMapper::toResponse).toList();
     }
 
+    @PostMapping("/add-contact")
+    public void addContact(@RequestBody AddContactRequest request) {
+        addContactUseCase.execute(userWebMapper.toCommand(request));
+    }
 }

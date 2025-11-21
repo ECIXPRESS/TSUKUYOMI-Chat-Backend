@@ -3,9 +3,11 @@ package edu.dosw.application;
 import edu.dosw.domain.model.ConversationMessage;
 import edu.dosw.domain.ports.inbound.GetUserMessagesInConversationUseCase;
 import edu.dosw.domain.ports.outbound.ConversationMessageRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class GetUserMessagesUseCaseImpl implements GetUserMessagesInConversationUseCase {
 
     private final ConversationMessageRepository conversationMessageRepository;

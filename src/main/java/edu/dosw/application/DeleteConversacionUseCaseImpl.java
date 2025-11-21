@@ -6,7 +6,9 @@ import edu.dosw.domain.ports.inbound.DeleteConversationUseCase;
 import edu.dosw.domain.ports.inbound.command.DeleteConversationCommand;
 import edu.dosw.domain.ports.outbound.ConversationRepository;
 import edu.dosw.domain.ports.outbound.UserRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DeleteConversacionUseCaseImpl implements DeleteConversationUseCase {
 
     private final ConversationRepository conversationRepository;

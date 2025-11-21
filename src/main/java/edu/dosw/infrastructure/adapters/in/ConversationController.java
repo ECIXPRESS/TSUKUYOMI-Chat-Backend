@@ -4,8 +4,6 @@ import edu.dosw.application.CreateConversationUseCaseImpl;
 import edu.dosw.application.SendMessageUseCaseImpl;
 import edu.dosw.domain.ports.inbound.DeleteConversationUseCase;
 import edu.dosw.domain.ports.inbound.FilterMessagesUseCase;
-import edu.dosw.domain.ports.inbound.GetConversationsUseCase;
-import edu.dosw.domain.ports.inbound.GetUserMessagesInConversationUseCase;
 import edu.dosw.infrastructure.adapters.in.dtos.*;
 import edu.dosw.infrastructure.adapters.in.mappers.ConversationMessageWebMapper;
 import edu.dosw.infrastructure.adapters.in.mappers.ConversationWebMapper;

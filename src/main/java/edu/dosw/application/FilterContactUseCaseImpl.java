@@ -3,11 +3,13 @@ package edu.dosw.application;
 import edu.dosw.domain.model.User;
 import edu.dosw.domain.ports.inbound.FilterContactsUseCase;
 import edu.dosw.domain.ports.outbound.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Service
 public class FilterContactUseCaseImpl implements FilterContactsUseCase {
 
     private final UserRepository userRepository;

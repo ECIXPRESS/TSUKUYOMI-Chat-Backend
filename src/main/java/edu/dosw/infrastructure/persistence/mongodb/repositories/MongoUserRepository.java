@@ -1,17 +1,17 @@
 package edu.dosw.infrastructure.persistence.mongodb.repositories;
 
-import edu.dosw.domain.model.Conversation;
 import edu.dosw.domain.model.User;
-import edu.dosw.domain.ports.outbound.ConversationRepository;
 import edu.dosw.domain.ports.outbound.UserRepository;
 import edu.dosw.infrastructure.persistence.mongodb.documents.UserDocument;
 import edu.dosw.infrastructure.persistence.mongodb.mappers.UserMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class MongoUserRepository implements UserRepository {
     private final MongoTemplate mongoTemplate;
     private final UserMapper userMapper;

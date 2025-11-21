@@ -7,7 +7,9 @@ import edu.dosw.infrastructure.adapters.in.dtos.ConversationMessageResponse;
 import edu.dosw.infrastructure.adapters.in.dtos.CreateConversationRequest;
 import edu.dosw.infrastructure.adapters.in.dtos.ConversationResponse;
 import edu.dosw.infrastructure.adapters.in.dtos.DeleteConversationRequest;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ConversationWebMapper {
 
     public ConversationResponse toResponse(Conversation conversation){
