@@ -16,16 +16,16 @@ public class UserEventListener {
         this.userRepository = userRepository;
     }
 
-    @KafkaListener(topics = "user-events")
-    public void handleUserEvent(UserCreatedEvent event) {
-        User chatUser = new User(
-                event.getUserId(),
-                event.getName(),
-                event.getProfilePhoto(),
-                true,
-                new ArrayList<>(),
-                new ArrayList<>()
-        );
-        userRepository.saveUser(chatUser);
-    }
+//    @KafkaListener(topics = "user-events")
+//    public void handleUserEvent(UserCreatedEvent event) {
+  //      User chatUser = new User(
+    //            event.getUserId(),
+      //          event.getName(),
+        //        event.getProfilePhoto(),
+          //      true,
+            //    new ArrayList<>(),
+              //  new ArrayList<>()
+        //);
+        //userRepository.saveUser(chatUser);
+    //}
 }

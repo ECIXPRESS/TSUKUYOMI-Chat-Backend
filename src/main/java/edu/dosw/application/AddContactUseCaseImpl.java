@@ -5,7 +5,9 @@ import edu.dosw.domain.model.User;
 import edu.dosw.domain.ports.inbound.AddContactUseCase;
 import edu.dosw.domain.ports.inbound.command.AddContactCommand;
 import edu.dosw.domain.ports.outbound.UserRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AddContactUseCaseImpl implements AddContactUseCase {
     private final UserRepository userRepository;
 

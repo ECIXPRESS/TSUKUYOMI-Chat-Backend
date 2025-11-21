@@ -1,15 +1,12 @@
 package edu.dosw.infrastructure.adapters.in;
 
 import edu.dosw.application.CreateConversationUseCaseImpl;
-import edu.dosw.application.SendMessageUseCaseImpl;
 import edu.dosw.domain.ports.inbound.DeleteConversationUseCase;
 import edu.dosw.domain.ports.inbound.FilterMessagesUseCase;
 import edu.dosw.infrastructure.adapters.in.dtos.*;
 import edu.dosw.infrastructure.adapters.in.mappers.ConversationMessageWebMapper;
 import edu.dosw.infrastructure.adapters.in.mappers.ConversationWebMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +18,6 @@ public class ConversationController {
 
     private final CreateConversationUseCaseImpl createConversation;
     private final ConversationMessageWebMapper conversationMessageWebMapper;
-    private final SendMessageUseCaseImpl sendMessageHandler;
-    private final SimpMessagingTemplate simpMessagingTemplate;
     private final ConversationWebMapper conversationWebMapper;
     private final FilterMessagesUseCase filterMessagesUseCase;
     private final DeleteConversationUseCase deleteConversationUseCase;
@@ -42,10 +37,5 @@ public class ConversationController {
         return filterMessagesUseCase.execute(id,filterWord).stream().map(conversationMessageWebMapper::toResponse).toList();
     }
 
-    @MessageMapping("/sendMessage")
-    public void sendMessage(ConversationMessageRequest message){
-        ConversationMessageResponse response = conversationMessageWebMapper.toResponse(sendMessageHandler.execute(conversationMessageWebMapper.toCommand(message)));
-        String destination = "/topic/conversations/" + response.getConversationId();
-        simpMessagingTemplate.convertAndSend(destination, response);
-    }
+
 }

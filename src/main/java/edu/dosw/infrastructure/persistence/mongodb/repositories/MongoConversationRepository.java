@@ -7,6 +7,7 @@ import edu.dosw.domain.ports.outbound.ConversationMessageRepository;
 import edu.dosw.domain.ports.outbound.ConversationRepository;
 import edu.dosw.domain.ports.outbound.UserRepository;
 import edu.dosw.infrastructure.persistence.mongodb.documents.ConversationDocument;
+import edu.dosw.infrastructure.persistence.mongodb.exceptions.MongoPersistenceExceptions;
 import edu.dosw.infrastructure.persistence.mongodb.mappers.ConversationMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -68,7 +69,7 @@ public class MongoConversationRepository implements ConversationRepository {
     public Conversation findConversationById(String conversationId) {
         ConversationDocument doc = mongoTemplate.findById(conversationId, ConversationDocument.class);
 
-        if (doc == null) return null;
+        if (doc == null) throw  MongoPersistenceExceptions.conversationNotFound();
 
         return conversationMapper.toDomain(doc,findMessage);
     }
