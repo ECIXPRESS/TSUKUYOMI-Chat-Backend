@@ -20,14 +20,20 @@ public class FilterMessagesUseCaseImpl implements FilterMessagesUseCase {
     @Override
     public List<ConversationMessage> execute(String conversationId, String filterWord) {
         try {
-            return conversationRepository.findConversationById(conversationId)
-                    .getMessages()
-                    .stream()
-                    .filter(c -> c.getText().contains(filterWord))
-                    .toList();
-
+        List<ConversationMessage> conversationMessages = conversationRepository.findConversationById(conversationId)
+                .getMessages();
+        if (filterWord == null || filterWord.trim().isEmpty()) {
+            return conversationMessages;
+        }
+        return conversationMessages
+                .stream()
+                .filter(c -> c.getText().contains(filterWord))
+                .toList();
         } catch (MongoPersistenceExceptions e) {
             throw ApplicationLayerExceptions.conversationNotFound();
         }
+
+
+
     }
 }

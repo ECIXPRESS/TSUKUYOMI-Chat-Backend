@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserWebMapper {
     public UserResponse toResponse(User user) {
-        return new UserResponse();
+        return new UserResponse(user.getId(), user.getName(),user.getProfilePhoto(), user.getIsActive());
     }
     public AddContactCommand toCommand(AddContactRequest request){
         return new AddContactCommand(request.getUserId(), request.getContactId());

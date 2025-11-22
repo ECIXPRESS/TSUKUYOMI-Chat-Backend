@@ -32,7 +32,7 @@ public class ConversationWebMapper {
 
     public CreateConversationCommand toCommand(CreateConversationRequest request){
         return new CreateConversationCommand(
-                request.getUsers()
+                request.getUsersIds()
         );
     }
 

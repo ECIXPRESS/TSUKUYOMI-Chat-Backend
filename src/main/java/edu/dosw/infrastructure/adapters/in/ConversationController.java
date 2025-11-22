@@ -34,7 +34,7 @@ public class ConversationController {
     }
 
     @GetMapping("/{id}/messages")
-    public List<ConversationMessageResponse> getMessages(@PathVariable String id,String filterWord) {
+    public List<ConversationMessageResponse> getMessages(@PathVariable String id, @RequestParam(required = false) String filterWord)  {
         return filterMessagesUseCase.execute(id,filterWord).stream().map(conversationMessageWebMapper::toResponse).toList();
     }
 

@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/messages")
-    public List<ConversationMessageResponse> getMessages(@PathVariable String id,String conversationId) {
+    public List<ConversationMessageResponse> getMessagesInConversation(@PathVariable String id, String conversationId) {
         return getUserMessagesInConversationUseCase.execute(id,conversationId).stream().map(conversationMessageWebMapper::toResponse).toList();
     }
 

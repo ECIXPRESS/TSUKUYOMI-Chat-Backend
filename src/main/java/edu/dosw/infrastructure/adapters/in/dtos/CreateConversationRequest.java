@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class CreateConversationRequest {
-    private List<String> users;
+    private List<String> usersIds;
 }
