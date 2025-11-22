@@ -1,9 +1,7 @@
 package edu.dosw.domain.model;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,5 +63,9 @@ public class Conversation {
 
     public Instant getCreationDate() {
         return creationDate;
+    }
+
+    public List<String> getMessagesIds() {
+        return messages.stream().map(ConversationMessage::getId).toList();
     }
 }

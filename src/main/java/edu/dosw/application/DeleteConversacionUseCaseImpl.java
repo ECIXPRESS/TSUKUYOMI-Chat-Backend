@@ -1,5 +1,6 @@
 package edu.dosw.application;
 
+import edu.dosw.application.exceptions.ApplicationLayerExceptions;
 import edu.dosw.domain.model.Conversation;
 import edu.dosw.domain.model.User;
 import edu.dosw.domain.ports.inbound.DeleteConversationUseCase;
@@ -23,11 +24,18 @@ public class DeleteConversacionUseCaseImpl implements DeleteConversationUseCase 
     public void execute(DeleteConversationCommand deleteConversationCommand) {
         Conversation conversation = conversationRepository.searchConversationByUserId(deleteConversationCommand.getConversationId());
         User user = userRepository.findUserById(deleteConversationCommand.getUserId());
-        if(conversation != null && user != null){
-            conversation.removeUser(deleteConversationCommand.getUserId());
-            user.removeConversation(deleteConversationCommand.getConversationId());
+
+        if(conversation == null) throw ApplicationLayerExceptions.conversationNotFound();
+
+        if(user == null) throw  ApplicationLayerExceptions.userNotFound();
+
+        conversation.removeUser(deleteConversationCommand.getUserId());
+        user.removeConversation(deleteConversationCommand.getConversationId());
+        if (conversation.getUsersIds().size() < 2){
+            conversationRepository.deleteConversation(conversation.getId());
         }else{
-            //exception
+            conversationRepository.updateConversation(conversation);
         }
+        userRepository.updateUser(user);
     }
 }

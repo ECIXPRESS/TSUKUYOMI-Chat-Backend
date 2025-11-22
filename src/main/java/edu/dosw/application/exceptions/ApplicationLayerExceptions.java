@@ -5,6 +5,8 @@ public class ApplicationLayerExceptions extends RuntimeException {
     private static final String USER_NOT_AUTHORIZED = "User not authorized";
     private static final String NEED_MORE_USERS = "There's needed 2 users at least to make a conversation";
     private static final String USER_OR_CONTACT_DOESNT_EXIST = "Both users must exist to add as contacts";
+    private static final String USER_NOT_FOUND = "Conversation not found";
+
     public ApplicationLayerExceptions(String message) {
         super(message);
     }
@@ -30,5 +32,8 @@ public class ApplicationLayerExceptions extends RuntimeException {
         return new ApplicationLayerExceptions(USER_OR_CONTACT_DOESNT_EXIST);
     }
 
+    public static ApplicationLayerExceptions userNotFound() {
+        return new ApplicationLayerExceptions(USER_NOT_FOUND);
+    }
 
 }

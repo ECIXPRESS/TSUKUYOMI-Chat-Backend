@@ -2,10 +2,8 @@ package edu.dosw.infrastructure.persistence.mongodb.repositories;
 
 import edu.dosw.domain.model.Conversation;
 import edu.dosw.domain.model.ConversationMessage;
-import edu.dosw.domain.model.User;
 import edu.dosw.domain.ports.outbound.ConversationMessageRepository;
 import edu.dosw.domain.ports.outbound.ConversationRepository;
-import edu.dosw.domain.ports.outbound.UserRepository;
 import edu.dosw.infrastructure.persistence.mongodb.documents.ConversationDocument;
 import edu.dosw.infrastructure.persistence.mongodb.exceptions.MongoPersistenceExceptions;
 import edu.dosw.infrastructure.persistence.mongodb.mappers.ConversationMapper;
@@ -21,15 +19,17 @@ public class MongoConversationRepository implements ConversationRepository {
     private final MongoTemplate mongoTemplate;
     private final ConversationMapper conversationMapper;
     private final java.util.function.Function<String, ConversationMessage> findMessage;
+    private final ConversationMessageRepository conversationMessageRepository;
 
     public MongoConversationRepository(
             MongoTemplate mongoTemplate,
             ConversationMapper mapper,
-            ConversationMessageRepository messageRepository
+            ConversationMessageRepository messageRepository, ConversationMessageRepository conversationMessageRepository
     ) {
         this.mongoTemplate = mongoTemplate;
         this.conversationMapper = mapper;
         this.findMessage = messageRepository::findMessageById;
+        this.conversationMessageRepository = conversationMessageRepository;
     }
 
     @Override
@@ -62,6 +62,7 @@ public class MongoConversationRepository implements ConversationRepository {
     @Override
     public void deleteConversation(String conversationId) {
         Query query = new Query(Criteria.where("_id").is(conversationId));
+        findConversationById(conversationId).getMessagesIds().forEach(conversationMessageRepository::deleteMessageById);
         mongoTemplate.remove(query, ConversationDocument.class);
     }
 
