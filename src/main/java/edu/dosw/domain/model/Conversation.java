@@ -11,6 +11,13 @@ public class Conversation {
     private List<ConversationMessage> messages;
     private List<String> users;
 
+    public Conversation(String conversationId,Instant creationDate, List<String> users,List<ConversationMessage> messages){
+        id = conversationId;
+        this.creationDate = creationDate;
+        this.users = users;
+        this.messages = messages;
+    }
+
     public Conversation(List<String> users){
         id = UUID.randomUUID().toString();
         creationDate = Instant.now();
@@ -20,7 +27,7 @@ public class Conversation {
 
     public void addUser(String userId){
         if(users.stream().anyMatch(s -> s.equals(userId))){
-            //no se puede agregar
+            //no se puede agregar otra vez
         }
         users.add(userId);
     }

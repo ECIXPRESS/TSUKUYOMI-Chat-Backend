@@ -1,6 +1,7 @@
 package edu.dosw.infrastructure.adapters.in;
 
 import edu.dosw.application.CreateConversationUseCaseImpl;
+import edu.dosw.domain.model.User;
 import edu.dosw.domain.ports.inbound.DeleteConversationUseCase;
 import edu.dosw.domain.ports.inbound.FilterMessagesUseCase;
 import edu.dosw.infrastructure.adapters.in.dtos.*;
@@ -36,6 +37,5 @@ public class ConversationController {
     public List<ConversationMessageResponse> getMessages(@PathVariable String id,String filterWord) {
         return filterMessagesUseCase.execute(id,filterWord).stream().map(conversationMessageWebMapper::toResponse).toList();
     }
-
 
 }

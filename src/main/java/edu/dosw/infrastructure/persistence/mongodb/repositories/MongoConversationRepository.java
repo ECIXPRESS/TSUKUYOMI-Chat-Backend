@@ -68,7 +68,8 @@ public class MongoConversationRepository implements ConversationRepository {
 
     @Override
     public Conversation findConversationById(String conversationId) {
-        ConversationDocument doc = mongoTemplate.findById(conversationId, ConversationDocument.class);
+        Query query = new Query(Criteria.where("_id").is(conversationId));
+        ConversationDocument doc = mongoTemplate.findOne(query, ConversationDocument.class);
 
         if (doc == null) throw  MongoPersistenceExceptions.conversationNotFound();
 

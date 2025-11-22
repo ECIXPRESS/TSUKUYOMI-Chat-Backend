@@ -6,8 +6,10 @@ import edu.dosw.domain.model.User;
 import edu.dosw.infrastructure.persistence.mongodb.documents.ConversationDocument;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class ConversationMapper {
@@ -18,25 +20,14 @@ public class ConversationMapper {
     ) {
         if (doc == null) return null;
 
-        List<String> users = doc.getParticipants() == null
-                ? List.of() //should be exception
-                : doc.getParticipants();
-
         List<ConversationMessage> messages = doc.getMessages() == null
-                ? List.of()
+                ? new ArrayList<>()
                 : doc.getMessages().stream()
                 .map(findMessage)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
 
-        Conversation conversation = new Conversation(
-                doc.getParticipants()
-        );
+        return new Conversation(doc.getId(),doc.getCreationDate(),doc.getUsers(),messages);
 
-        // populate lists
-        users.forEach(conversation::addUser);
-        messages.forEach(conversation::addMessage);
-
-        return conversation;
     }
 
     public ConversationDocument toDocument(Conversation conversation) {
@@ -46,7 +37,7 @@ public class ConversationMapper {
                 conversation.getId(),
                 conversation.getCreationDate(),
                 conversation.getUsersIds(),
-                conversation.getMessages().stream().map(ConversationMessage::getId).toList(),
+                conversation.getMessages().stream().map(ConversationMessage::getId).collect(Collectors.toCollection(ArrayList::new)),
                 new java.util.Date()
         );
     }

@@ -10,7 +10,7 @@ public class User {
     private final String id;
     private String name;
     private String profilePhoto;
-    private Boolean isActive;
+    private Boolean isActive = false;
     private List<String> conversations;
     private List<String> contacts;
 
@@ -18,7 +18,6 @@ public class User {
         this.id = userId;
         this.name = name;
         this.profilePhoto = profilePhoto;
-        isActive = false;
         conversations = new ArrayList<>();
         contacts = new ArrayList<>();
     }

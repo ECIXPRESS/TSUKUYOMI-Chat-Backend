@@ -6,6 +6,7 @@ import edu.dosw.domain.model.Conversation;
 import edu.dosw.domain.model.ConversationMessage;
 import edu.dosw.domain.ports.inbound.SendMessageUseCase;
 import edu.dosw.domain.ports.inbound.command.SendConversationMessageCommand;
+import edu.dosw.domain.ports.outbound.ConversationMessageRepository;
 import edu.dosw.domain.ports.outbound.ConversationRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,12 @@ public class SendMessageUseCaseImpl implements SendMessageUseCase {
 
     private final ConversationRepository conversationRepository;
     private final ConversationMessageApplicationMapper conversationMessageApplicationMapper;
+    private final ConversationMessageRepository conversationMessageRepository;
 
-    public SendMessageUseCaseImpl(ConversationRepository conversationRepository, ConversationMessageApplicationMapper conversationMessageApplicationMapper) {
+    public SendMessageUseCaseImpl(ConversationRepository conversationRepository, ConversationMessageApplicationMapper conversationMessageApplicationMapper, ConversationMessageRepository conversationMessageRepository) {
         this.conversationRepository = conversationRepository;
         this.conversationMessageApplicationMapper = conversationMessageApplicationMapper;
+        this.conversationMessageRepository = conversationMessageRepository;
     }
 
     @Override
@@ -38,6 +41,7 @@ public class SendMessageUseCaseImpl implements SendMessageUseCase {
 
         conversation.addMessage(domainMessage);
         conversationRepository.updateConversation(conversation);
+        conversationMessageRepository.saveConversationMessage(domainMessage);
 
         return domainMessage;
     }

@@ -1,6 +1,8 @@
 package edu.dosw.infrastructure.adapters.in;
 
+import edu.dosw.domain.model.User;
 import edu.dosw.domain.ports.inbound.*;
+import edu.dosw.domain.ports.outbound.UserRepository;
 import edu.dosw.infrastructure.adapters.in.dtos.AddContactRequest;
 import edu.dosw.infrastructure.adapters.in.dtos.ConversationMessageResponse;
 import edu.dosw.infrastructure.adapters.in.dtos.ConversationResponse;
@@ -27,6 +29,7 @@ public class UserController {
     private final ConversationWebMapper conversationWebMapper;
     private final GetConversationsUseCase getConversationsUseCase;
     private final AddContactUseCase addContactUseCase;
+    private UserRepository userRepository; //borar despues de la prueba junto con /create-testusers
 
     @GetMapping("/{id}/filter/contacts")
     public List<UserResponse> getContacts(@PathVariable String id, String filterWord) {
@@ -55,5 +58,22 @@ public class UserController {
     @PostMapping("/add-contact")
     public void addContact(@RequestBody AddContactRequest request) {
         addContactUseCase.execute(userWebMapper.toCommand(request));
+    }
+
+    @PostMapping("/create-test-users")
+    public String createTestUsers() {
+        // Crear usuario 1
+        User user1 = new User("Nikolas","Nikolas",null);
+        userRepository.saveUser(user1);
+
+        // Crear usuario 2
+        User user2 = new User("Manuel","Manuel",null);
+        userRepository.saveUser(user2);
+
+        // Crear usuario 2
+        User user3 = new User("Martin","Martin",null);
+        userRepository.saveUser(user3);
+
+        return "✅ Usuarios de prueba creados: user1, user2";
     }
 }
