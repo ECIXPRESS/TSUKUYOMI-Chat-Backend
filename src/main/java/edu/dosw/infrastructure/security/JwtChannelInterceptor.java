@@ -11,11 +11,14 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class JwtChannelInterceptor implements ChannelInterceptor {
 
     private final edu.dosw.infrastructure.security.TokenService tokenService;
+
+    public JwtChannelInterceptor(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
