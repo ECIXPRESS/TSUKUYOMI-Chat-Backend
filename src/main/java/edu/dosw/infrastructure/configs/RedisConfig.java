@@ -1,35 +1,38 @@
 package edu.dosw.infrastructure.configs;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import edu.dosw.infrastructure.events.UserEventsListener;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 @Configuration
+@RequiredArgsConstructor
 public class RedisConfig {
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper;
-    }
+    private final UserEventsListener userEventsListener;
 
     @Bean
-    public RedisMessageListenerContainer redisContainer(
-            RedisConnectionFactory connectionFactory,
-            UserEventsListener listener) {
+    public RedisMessageListenerContainer redisMessageListenerContainer(
+            RedisConnectionFactory connectionFactory) {
 
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
 
-        // Suscribirse a múltiples eventos
-        container.addMessageListener(listener, new ChannelTopic("events.user.created"));
-        container.addMessageListener(listener, new ChannelTopic("events.login.success"));
+        // Suscribirse al canal específico de eventos de login
+        container.addMessageListener(
+                new MessageListenerAdapter(userEventsListener),
+                ChannelTopic.of("events.login.success")
+        );
+
+        // También puedes suscribirte a otros canales si es necesario
+        container.addMessageListener(
+                new MessageListenerAdapter(userEventsListener),
+                ChannelTopic.of("events.user.created")
+        );
 
         return container;
     }
