@@ -12,12 +12,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final ChannelInterceptor jwtChannelInterceptor;
-
-    public WebSocketConfig(ChannelInterceptor jwtChannelInterceptor) {
-        this.jwtChannelInterceptor = jwtChannelInterceptor;
-    }
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // servidor hacia el cliente
@@ -38,8 +32,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws-native")
                 .setAllowedOriginPatterns("*");
     }
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(jwtChannelInterceptor);
-    }
+
 }
