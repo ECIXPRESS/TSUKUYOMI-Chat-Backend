@@ -5,7 +5,7 @@ services:
     build: .
     container_name: chat-service
     ports:
-      - "8085:8085"
+      - "8084:8084"
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - MONGODB_URI=${MONGODB_URI:-mongodb://localhost:27017/Chat-db}
