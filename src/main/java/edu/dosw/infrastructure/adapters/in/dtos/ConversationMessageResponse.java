@@ -11,7 +11,7 @@ public class ConversationMessageResponse {
     private String messageId;
     private String conversationId;
     private String authorId;
-    private String content;
+    private String text;
     private Instant creationDate;
     private Boolean isRead;
 }

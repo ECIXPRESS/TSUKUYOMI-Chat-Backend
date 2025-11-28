@@ -1,5 +1,7 @@
 package edu.dosw.domain.model;
 
+import edu.dosw.domain.model.exceptions.ModelLayerExceptions;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -13,6 +15,8 @@ public abstract class ConversationMessage {
     private String conversationId;
 
     protected ConversationMessage(String conversationId, String text, String author){
+        if(text.isEmpty()) throw ModelLayerExceptions.emptyMessage();
+
         id = UUID.randomUUID().toString();
         this.conversationId = conversationId;
         sendDate = Instant.now();
@@ -21,6 +25,8 @@ public abstract class ConversationMessage {
         isRead = false;
     }
     protected ConversationMessage(String id, String conversationId, String author, String text, Instant sendDate, Boolean isRead) {
+        if(text.isEmpty()) throw ModelLayerExceptions.emptyMessage();
+
         this.id = id;
         this.conversationId = conversationId;
         this.author = author;

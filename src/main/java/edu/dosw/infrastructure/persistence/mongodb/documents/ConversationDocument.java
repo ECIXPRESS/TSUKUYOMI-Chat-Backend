@@ -24,7 +24,7 @@ public class ConversationDocument{
     private Instant creationDate;
 
     @Field("users")
-    private List<String> participants;
+    private List<String> users;
 
     @Field("messages")
     private List<String> messages;

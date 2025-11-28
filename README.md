@@ -1,6 +1,6 @@
 # TSUKUYOMI-Chat-Backend
 
-# 📚 ECIEXPRESS — Sistema de Autenticacion
+# 📚 ECIEXPRESS — Sistema de Chat
 
 > <b>Sin filas, sin estres, ECIEXPRESS </b>
 

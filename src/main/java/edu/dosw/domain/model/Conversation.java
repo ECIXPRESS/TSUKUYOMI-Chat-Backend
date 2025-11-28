@@ -1,9 +1,7 @@
 package edu.dosw.domain.model;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +10,13 @@ public class Conversation {
     private final Instant creationDate;
     private List<ConversationMessage> messages;
     private List<String> users;
+
+    public Conversation(String conversationId,Instant creationDate, List<String> users,List<ConversationMessage> messages){
+        id = conversationId;
+        this.creationDate = creationDate;
+        this.users = users;
+        this.messages = messages;
+    }
 
     public Conversation(List<String> users){
         id = UUID.randomUUID().toString();
@@ -22,7 +27,7 @@ public class Conversation {
 
     public void addUser(String userId){
         if(users.stream().anyMatch(s -> s.equals(userId))){
-            //no se puede agregar
+            //no se puede agregar otra vez
         }
         users.add(userId);
     }
@@ -65,5 +70,9 @@ public class Conversation {
 
     public Instant getCreationDate() {
         return creationDate;
+    }
+
+    public List<String> getMessagesIds() {
+        return messages.stream().map(ConversationMessage::getId).toList();
     }
 }
