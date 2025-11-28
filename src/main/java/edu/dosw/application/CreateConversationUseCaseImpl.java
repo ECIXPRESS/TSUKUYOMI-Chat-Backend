@@ -37,7 +37,7 @@ public class CreateConversationUseCaseImpl implements CreateConversationUseCase 
             throw ApplicationLayerExceptions.notEnoughUsers();
         }
 
-        Conversation conversation = new Conversation(validUserIds);
+        Conversation conversation = new Conversation(validUserIds,command.getOrderId());
         conversationRepository.saveConversation(conversation);
 
         for (String userId : validUserIds) {

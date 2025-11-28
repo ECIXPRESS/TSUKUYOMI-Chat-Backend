@@ -1,9 +1,11 @@
 package edu.dosw.infrastructure.adapters.in;
 
+import edu.dosw.application.AddContactUseCaseImpl;
 import edu.dosw.application.CreateConversationUseCaseImpl;
 import edu.dosw.domain.model.User;
 import edu.dosw.domain.ports.inbound.DeleteConversationUseCase;
 import edu.dosw.domain.ports.inbound.FilterMessagesUseCase;
+import edu.dosw.domain.ports.inbound.GetConversationByOrderIdUseCase;
 import edu.dosw.infrastructure.adapters.in.dtos.*;
 import edu.dosw.infrastructure.adapters.in.mappers.ConversationMessageWebMapper;
 import edu.dosw.infrastructure.adapters.in.mappers.ConversationWebMapper;
@@ -22,6 +24,7 @@ public class ConversationController {
     private final ConversationWebMapper conversationWebMapper;
     private final FilterMessagesUseCase filterMessagesUseCase;
     private final DeleteConversationUseCase deleteConversationUseCase;
+    private final GetConversationByOrderIdUseCase getConversationByOrderIdUseCase;
 
     @PostMapping
     public ConversationResponse create(@RequestBody CreateConversationRequest req) {
@@ -36,6 +39,11 @@ public class ConversationController {
     @GetMapping("/{id}/messages")
     public List<ConversationMessageResponse> getMessages(@PathVariable String id, @RequestParam(required = false) String filterWord)  {
         return filterMessagesUseCase.execute(id,filterWord).stream().map(conversationMessageWebMapper::toResponse).toList();
+    }
+    
+    @GetMapping("/order/{orderId}")
+    public ConversationResponse getByOrderId(@PathVariable String orderId) {
+        return conversationWebMapper.toResponse(getConversationByOrderIdUseCase.execute(orderId));
     }
 
 }

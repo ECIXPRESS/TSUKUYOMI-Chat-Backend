@@ -59,21 +59,4 @@ public class UserController {
     public void addContact(@RequestBody AddContactRequest request) {
         addContactUseCase.execute(userWebMapper.toCommand(request));
     }
-
-    @PostMapping("/create-test-users")
-    public String createTestUsers() {
-        // Crear usuario 1
-        User user1 = new User("Nikolas","Nikolas",null);
-        userRepository.saveUser(user1);
-
-        // Crear usuario 2
-        User user2 = new User("Manuel","Manuel",null);
-        userRepository.saveUser(user2);
-
-        // Crear usuario 2
-        User user3 = new User("Martin","Martin",null);
-        userRepository.saveUser(user3);
-
-        return "✅ Usuarios de prueba creados: user1, user2";
-    }
 }

@@ -10,15 +10,18 @@ public class Conversation {
     private final Instant creationDate;
     private List<ConversationMessage> messages;
     private List<String> users;
+    private final String orderId;
 
-    public Conversation(String conversationId,Instant creationDate, List<String> users,List<ConversationMessage> messages){
+    public Conversation(String conversationId, Instant creationDate, List<String> users, List<ConversationMessage> messages, String orderId){
         id = conversationId;
         this.creationDate = creationDate;
         this.users = users;
         this.messages = messages;
+        this.orderId = orderId;
     }
 
-    public Conversation(List<String> users){
+    public Conversation(List<String> users, String orderId){
+        this.orderId = orderId;
         id = UUID.randomUUID().toString();
         creationDate = Instant.now();
         this.users = users;
@@ -66,6 +69,10 @@ public class Conversation {
             }else{
                 //exception
             }
+    }
+
+    public String getOrderId() {
+        return orderId;
     }
 
     public Instant getCreationDate() {

@@ -26,13 +26,15 @@ public class ConversationWebMapper {
                                 m.getText(),
                                 m.getSendDate(),
                                 m.getIsRead()
-                        )).toList()
+                        )).toList(),
+                conversation.getOrderId()
         );
     }
 
     public CreateConversationCommand toCommand(CreateConversationRequest request){
         return new CreateConversationCommand(
-                request.getUsersIds()
+                request.getUsersIds(),
+                request.getOrderId()
         );
     }
 

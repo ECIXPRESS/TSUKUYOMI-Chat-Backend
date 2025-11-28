@@ -33,6 +33,18 @@ public class MongoConversationRepository implements ConversationRepository {
     }
 
     @Override
+    public Conversation findConversationByOrderId(String orderId) {
+        Query query = new Query(Criteria.where("orderId").is(orderId));
+        ConversationDocument doc = mongoTemplate.findOne(query, ConversationDocument.class);
+
+        if (doc == null) {
+            throw MongoPersistenceExceptions.conversationNotFound();
+        }
+
+        return conversationMapper.toDomain(doc, findMessage);
+    }
+
+    @Override
     public void saveConversation(Conversation conversation) {
         mongoTemplate.save(conversationMapper.toDocument(conversation));
     }

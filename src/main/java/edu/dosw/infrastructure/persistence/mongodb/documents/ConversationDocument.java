@@ -31,4 +31,7 @@ public class ConversationDocument{
 
     @Field("last_updated")
     private Date lastUpdated;
+
+    @Field("orderId")
+    private String orderId;
 }

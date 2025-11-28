@@ -26,7 +26,7 @@ public class ConversationMapper {
                 .map(findMessage)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        return new Conversation(doc.getId(),doc.getCreationDate(),doc.getUsers(),messages);
+        return new Conversation(doc.getId(),doc.getCreationDate(),doc.getUsers(),messages,doc.getOrderId());
 
     }
 
@@ -38,7 +38,8 @@ public class ConversationMapper {
                 conversation.getCreationDate(),
                 conversation.getUsersIds(),
                 conversation.getMessages().stream().map(ConversationMessage::getId).collect(Collectors.toCollection(ArrayList::new)),
-                new java.util.Date()
+                new java.util.Date(),
+                conversation.getOrderId()
         );
     }
 }

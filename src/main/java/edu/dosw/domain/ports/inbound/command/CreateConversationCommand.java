@@ -10,4 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateConversationCommand {
     private List<String> usersIds;
+    private String orderId;
 }

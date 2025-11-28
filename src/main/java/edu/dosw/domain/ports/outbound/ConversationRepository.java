@@ -5,6 +5,7 @@ import edu.dosw.domain.model.Conversation;
 import java.util.List;
 
 public interface ConversationRepository {
+    Conversation findConversationByOrderId(String orderId);
     void saveConversation(Conversation conversation);
     Conversation searchConversationByUserId(String userId);
     List<Conversation> listConversations();
