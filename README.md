@@ -28,10 +28,8 @@
 9. ⚠️ [Manejo de Errores](#9--manejo-de-errores)
 10. 🧪 [Evidencia de las pruebas y cómo ejecutarlas](#10--evidencia-de-las-pruebas-y-como-ejecutarlas)
 11. 🗂️ [Código de la implementación organizado en las respectivas carpetas](#11--codigo-de-la-implementacion-organizado-en-las-respectivas-carpetas)
-12. 📝 [Código documentado](#12--codigo-documentado)
-13. 🧾 [Pruebas coherentes con el porcentaje de cobertura expuesto](#13--pruebas-coherentes-con-el-porcentaje-de-cobertura-expuesto)
-14. 🚀 [Ejecución del Proyecto](#14--ejecucion-del-proyecto)
-15. ☁️ [Evidencia de CI/CD y Despliegue en Azure](#15--evidencia-de-cicd-y-despliegue-en-azure)
+12. 🚀 [Ejecución del Proyecto](#12--ejecucion-del-proyecto)
+13. ☁️ [Evidencia de CI/CD y Despliegue en Azure](#13Per--evidencia-de-cicd-y-despliegue-en-azure)
 
 
 ---
@@ -58,13 +56,14 @@ reducir los tiempos de espera y mejorando la experiencia de todos.
 
 ## 3. ⚡ Funcionalidades principales
 
-
+- Envío y recepción de mensajes en tiempo real
+- Sistema de contactos entre los venderores y los usuarios
+- Notificaciones de mensajes nuevos
+- Búsqueda de conversaciones y mensajes
 
 ## 4. 📋 Manejo de Estrategia de versionamiento y branches
 
 ### Estrategia de Ramas (Git Flow)
-
--
 
 ### Ramas y propósito
 - Manejaremos GitFlow, el modelo de ramificación para el control de versiones de Git
@@ -320,14 +319,22 @@ Esta es capturada por el **Global Exception Handler**, que devuelve una respuest
 
 La siguiente tabla resume los principales tipos de excepciones manejadas en el sistema, junto con su respectivo código HTTP y un ejemplo de mensaje retornado:
 
-| **Excepción** | **Código HTTP** | **Descripción del error** | **Ejemplo de mensaje**                                 |
-|---------------|-----------------|---------------------------|--------------------------------------------------------|
-| `IllegalArgumentException` | `400 Bad Request` | Parámetros inválidos o peticiones mal estructuradas | *"El campo 'subjectId' no puede ser nulo."*            |
-| `MethodArgumentNotValidException` | `400 Bad Request` | Error de validación en un DTO o parámetro de entrada | *"El correo electrónico no cumple el formato válido."* |
-| `EntityNotFoundException` | `404 Not Found` | El recurso solicitado no existe en la base de datos | *"La materia con ID AYPR no existe."*                  |
-| `DuplicateKeyException` | `409 Conflict` | Intento de crear un registro que ya existe en MongoDB | *"El usuario ya se encuentra registrado."*             |
-| `AccessDeniedException` | `403 Forbidden` | Intento de acceder a un recurso sin permisos | *"Acceso denegado para el rol Usuario."*               |
-| `Exception` | `500 Internal Server Error` | Error interno no controlado del servidor | *"Error inesperado del servidor."*                     |
+| **Excepción** | **Código HTTP** | **Descripción del error** | **Ejemplo de mensaje** |
+|---------------|-----------------|---------------------------|------------------------|
+| `IllegalArgumentException` | `400 Bad Request` | Parámetros inválidos o peticiones mal estructuradas | *"El parámetro no puede ser nulo."* |
+| `MethodArgumentNotValidException` | `400 Bad Request` | Error de validación en un DTO o parámetro de entrada | *"El campo no cumple con el formato requerido."* |
+| `ModelLayerExceptions` | `400 Bad Request` | Errores de validación en el modelo de dominio | *"Cannot have empty message"* |
+| `ApplicationLayerExceptions` | | **Agrupa múltiples errores de lógica de negocio:** | |
+| └─ `conversationNotFound()` | `404 Not Found` | La conversación solicitada no existe | *"Conversation not found"* |
+| └─ `conversationNotFound(id)` | `404 Not Found` | Conversación específica no encontrada | *"Conversation not found: {conversationId}"* |
+| └─ `userNotFound()` | `404 Not Found` | Usuario no encontrado en el sistema | *"Conversation not found"* *(nota: revisar mensaje)* |
+| └─ `userNotAuthorized()` | `403 Forbidden` | El usuario no tiene permisos para realizar la acción | *"User not authorized"* |
+| └─ `notEnoughUsers()` | `400 Bad Request` | Intento de crear conversación sin usuarios suficientes | *"There's needed 2 users at least to make a conversation"* |
+| └─ `cannotAddContact()` | `400 Bad Request` | Intento de agregar contacto con usuarios inexistentes | *"Both users must exist to add as contacts"* |
+| `MongoPersistenceExceptions` | `404 Not Found` | Errores relacionados con la capa de persistencia MongoDB | *"Conversation not found on repository"* |
+| `ConversationExceptions` | `401 Unauthorized` | Errores específicos del módulo de conversaciones | *"Autenticacion del usuario fallida"* |
+| `DuplicateKeyException` | `409 Conflict` | Intento de crear un registro duplicado en MongoDB | *"El registro ya existe en la base de datos."* |
+| `Exception` | `500 Internal Server Error` | Error interno no controlado del servidor | *"Error inesperado del servidor."* |
 
 ---
 
@@ -352,32 +359,397 @@ La siguiente tabla resume los principales tipos de excepciones manejadas en el s
 
 ## 10. 🧪 Evidencia de las pruebas y cómo ejecutarlas
 
+El backend de **ECIExpress** implementa una **estrategia integral de pruebas** que garantiza la calidad, funcionalidad y confiabilidad del código mediante pruebas unitarias y de integración.
 
+---
+
+### 🎯 Tipos de pruebas implementadas
+
+| **Tipo de prueba** | **Descripción** | **Herramientas utilizadas** |
+|-------------------|-----------------|----------------------------|
+| **Pruebas unitarias** | Validan el funcionamiento aislado de cada componente (servicios, repositorios, utilidades) | JUnit 5, Mockito |
+| **Cobertura de código** | Mide el porcentaje de código cubierto por las pruebas | JaCoCo |
+
+---
+
+### 🚀 Cómo ejecutar las pruebas
+
+#### **1️⃣ Ejecutar todas las pruebas**
+
+Desde la raíz del proyecto, ejecuta:
+
+```bash
+mvn clean test
+```
+
+Este comando:
+- Limpia compilaciones anteriores (`clean`)
+- Ejecuta todas las pruebas unitarias y de integración (`test`)
+- Muestra el resultado en la consola
+
+#### **2️⃣ Generar reporte de cobertura con JaCoCo**
+
+```bash
+mvn clean test jacoco:report
+```
+
+El reporte HTML se generará en:
+```
+target/site/jacoco/index.html
+```
+
+Abre este archivo en tu navegador para ver:
+- Cobertura por paquete
+- Cobertura por clase
+- Líneas cubiertas vs. no cubiertas
+
+#### **3️⃣ Ejecutar pruebas desde IntelliJ IDEA**
+
+1. Click derecho sobre la carpeta `src/test/java`
+2. Selecciona **"Run 'Tests in...'**
+3. Ver resultados en el panel inferior
+
+#### **4️⃣ Ejecutar una prueba específica**
+
+```bash
+mvn test -Dtest=ConversationServiceTest
+```
+
+---
+
+### 🧪 Ejemplo de prueba unitaria
+
+```java
+@ExtendWith(MockitoExtension.class)
+class SendMessageUseCaseImplTest {
+
+    @Mock
+    private ConversationRepository conversationRepository;
+
+    @Mock
+    private ConversationMessageApplicationMapper conversationMessageApplicationMapper;
+
+    @Mock
+    private ConversationMessageRepository conversationMessageRepository;
+
+    @InjectMocks
+    private SendMessageUseCaseImpl sendMessageUseCase;
+
+    private String conversationId;
+    private String authorId;
+    private Conversation conversation;
+    private SendConversationMessageCommand command;
+
+    @BeforeEach
+    void setUp() {
+        conversationId = "conv-123";
+        authorId = "user-1";
+
+        List<String> userIds = Arrays.asList(authorId, "user-2");
+        conversation = new Conversation(userIds, "order-1");
+
+        command = new SendConversationMessageCommand(conversationId, "Hola mundo", authorId);
+    }
+
+    @Test
+    void execute_shouldSendMessage_whenConversationExistsAndUserIsAuthorized() {
+        // Arrange
+        ConversationMessage message = new Regular(conversationId, "Hola mundo", authorId);
+
+        when(conversationRepository.findConversationById(conversationId)).thenReturn(conversation);
+        when(conversationMessageApplicationMapper.toDomain(command)).thenReturn(message);
+
+        // Act
+        ConversationMessage result = sendMessageUseCase.execute(command);
+
+        // Assert
+        assertThat(result).isNotNull();
+        verify(conversationRepository).updateConversation(conversation);
+        verify(conversationMessageRepository).saveConversationMessage(message);
+    }
+}
+```
+
+---
+
+### 🖼️ Evidencias de ejecución
+
+1. **Consola mostrando pruebas ejecutándose exitosamente**
+    ![Evidencia consola pruebas](./docs/images/testConsola.png)
+
+2. **Reporte JaCoCo con cobertura de código**
+    ![Evidencia reporte JaCoCo](./docs/images/jacoco.png)
+
+---
+
+### ✅ Criterios de aceptación de pruebas
+
+Para considerar el sistema correctamente probado, se debe cumplir:
+
+- ✅ **Cobertura mínima del 80%** en servicios y lógica de negocio
+- ✅ **Todas las pruebas en estado PASSED** (sin fallos)
+- ✅ **Cero errores de compilación** en el código de pruebas
+- ✅ **Pruebas de casos felices y casos de error** implementadas
+
+---
+
+### 🔄 Integración con CI/CD
+
+Las pruebas se ejecutan automáticamente en cada **push** o **pull request** mediante GitHub Actions:
+
+```yaml
+  - name: Build + Test + Coverage
+    run: mvn -B clean verify
+```
+
+Esto garantiza que ningún cambio roto llegue a producción.
+
+---
 
 ## 11. 🗂️ Código de la implementación organizado en las respectivas carpetas
 
+El proyecto **Tsukuyomi Chat Backend** sigue una **arquitectura hexagonal (puertos y adaptadores)** que separa las responsabilidades en capas bien definidas, promoviendo la escalabilidad, testabilidad y mantenibilidad del código.
+
+---
+
+### 📂 Estructura general del proyecto (Scaffolding)
+
+```
+TSUKUYOMI-Chat-Backend/
+│
+├── 📁 src/
+│   ├── 📁 main/
+│   │   ├── 📁 java/edu/dosw/
+│   │   │   ├── 📄 ChatApplication.java          # Clase principal de Spring Boot
+│   │   │   ├── 📁 domain/                       # 🟢 Capa de Dominio
+│   │   │   │   ├── 📁 model/                    # Entidades del negocio
+│   │   │   │   └── 📁 ports/                    # Interfaces (contratos)
+│   │   │   │       ├── 📁 inbound/              # Casos de uso
+│   │   │   │       └── 📁 outbound/             # Repositorios
+│   │   │   │
+│   │   │   ├── 📁 application/                  # 🔵 Capa de Aplicación
+│   │   │   │   ├── *UseCaseImpl.java            # Implementación de casos de uso
+│   │   │   │   ├── 📁 applicationmappers/       # Mappers internos
+│   │   │   │   └── 📁 exceptions/               # Excepciones de aplicación
+│   │   │   │
+│   │   │   └── 📁 infrastructure/               # 🟠 Capa de Infraestructura
+│   │   │       ├── 📁 adapters/in/              # Controladores REST/WebSocket
+│   │   │       │   ├── 📁 dtos/                 # DTOs de entrada/salida
+│   │   │       │   ├── 📁 mappers/              # Mappers Web ↔ Dominio
+│   │   │       │   └── 📁 exceptions/           # Manejo global de excepciones
+│   │   │       │
+│   │   │       ├── 📁 persistence/              # Adaptadores de MongoDB
+│   │   │       │   ├── 📁 documents/            # Documentos MongoDB
+│   │   │       │   ├── 📁 mappers/              # Mappers BD ↔ Dominio
+│   │   │       │   ├── 📁 repositories/         # Repositorios Spring Data
+│   │   │       │   └── 📁 exceptions/           # Excepciones de persistencia
+│   │   │       │
+│   │   │       ├── 📁 configs/                  # Configuraciones de Spring
+│   │   │       └── 📁 events/                   # Eventos y notificaciones
+│   │   │
+│   │   └── 📁 resources/
+│   │       └── application.properties           # Configuración de la aplicación
+│   │
+│   └── 📁 test/                                 # 🧪 Pruebas
+│       └── 📁 java/edu/dosw/
+│           ├── 📁 application/                  # Tests de casos de uso
+│           ├── 📁 domain/                       # Tests del modelo
+│           └── 📁 infrastructure/               # Tests de adaptadores
+│
+└── 📁 target/                                   # Artefactos compilados (Maven)
+    └── 📁 site/jacoco/                          # Reportes de cobertura
+```
+
+---
+
+### 🏛️ Arquitectura Hexagonal
+
+El proyecto implementa **Arquitectura Hexagonal (Ports & Adapters)** con tres capas principales:
+
+| **Capa** | **Responsabilidad** | **Dependencias** |
+|----------|---------------------|------------------|
+| **🟢 Domain** | Lógica de negocio pura, entidades y contratos (ports) | Ninguna (independiente) |
+| **🔵 Application** | Orquestación de casos de uso y reglas de negocio | Solo depende de Domain |
+| **🟠 Infrastructure** | Adaptadores externos (REST, MongoDB, WebSocket, configs) | Depende de Domain y Application |
+
+**Flujo de dependencias:** `Infrastructure → Application → Domain`
+
+---
+
+### 🎯 Principios de diseño aplicados
+
+✅ **Separación de responsabilidades** - Cada capa tiene un propósito único y bien definido  
+✅ **Inversión de dependencias** - Las capas externas dependen de las internas, no al revés  
+✅ **Independencia del framework** - La lógica de negocio no depende de Spring o MongoDB  
+✅ **Testabilidad** - Fácil crear pruebas unitarias mockeando dependencias  
+✅ **Mantenibilidad** - Cambios en una capa no afectan a las demás  
+
+---
+
+## 12. 🚀 Ejecución del Proyecto
 
 
-## 12. 📝 Código documentado
+
+## 13. ☁️ Evidencia de CI/CD y Despliegue en Azure
+
+El proyecto implementa un **pipeline completo de CI/CD** utilizando **GitHub Actions** para automatizar el proceso de integración continua, pruebas, análisis de calidad y despliegue en **Azure Cloud**.
+
+---
+
+### 🔄 Pipeline de CI/CD
+
+El proyecto cuenta con **3 workflows automatizados** que se ejecutan en diferentes momentos del ciclo de desarrollo:
+
+| **Workflow** | **Archivo** | **Trigger** | **Propósito** |
+|-------------|-------------|-------------|---------------|
+| **CI - Tests & Quality** | `ci.yml` | Push/PR a `develop`, `main`, `feature/**` | Ejecutar pruebas, generar cobertura y análisis de SonarQube |
+| **CD - Deploy DEV** | `cd_dev.yml` | Push a `develop`, `feature/**` | Desplegar automáticamente al ambiente de desarrollo |
+| **CD - Deploy PROD** | `cd_prod.yml` | Push a `main` | Desplegar automáticamente al ambiente de producción |
+
+---
+
+### 🧪 CI - Integración Continua (ci.yml)
+
+Este workflow se ejecuta en cada **push** o **pull request** para garantizar la calidad del código antes de integrar cambios.
+
+**Pasos del pipeline CI:**
+
+1. **Checkout del código** - Descarga el código fuente del repositorio
+2. **Setup JDK 17** - Configura el entorno de Java con Temurin
+3. **Cache de dependencias Maven** - Optimiza tiempos de build reutilizando dependencias
+4. **Levantar MongoDB (servicio)** - Inicia una instancia de MongoDB para las pruebas
+5. **Build + Test + Coverage** - Ejecuta `mvn clean verify` para compilar, probar y generar cobertura
+6. **Análisis SonarQube** - Envía métricas de calidad de código a SonarCloud/SonarQube
+7. **Publicar reporte JaCoCo** - Sube el reporte HTML de cobertura como artefacto
+
+**Fragmento del workflow CI:**
+
+```yaml
+- name: Build + Test + Coverage
+  run: mvn -B clean verify
+  env:
+    SPRING_PROFILES_ACTIVE: test
+    MONGODB_URI: mongodb://localhost:27017/Chat-db
+
+- name: SonarQube Analysis
+  run: mvn -B sonar:sonar
+  env:
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+```
+
+**Beneficios:**
+- ✅ Detección temprana de errores antes de fusionar cambios
+- ✅ Garantiza que todas las pruebas pasen antes del despliegue
+- ✅ Métricas de calidad de código (code smells, bugs, vulnerabilidades)
+- ✅ Reporte de cobertura de código disponible en cada build
+
+---
+
+### 🚀 CD - Despliegue Continuo (cd_dev.yml / cd_prod.yml)
+
+Estos workflows automatizan el **despliegue** del backend en **Azure Web App** utilizando **Docker** y **Azure Container Registry (ACR)**.
+
+**Pasos del pipeline CD:**
+
+1. **Checkout del código** - Descarga el código fuente
+2. **Login a Azure Container Registry** - Autenticación con credenciales almacenadas en secrets
+3. **Build de la imagen Docker** - Construye la imagen con etiquetas `latest` y hash del commit
+4. **Push de la imagen a ACR** - Sube la imagen al registro de contenedores de Azure
+5. **Deploy a Azure Web App** - Despliega el contenedor en el App Service correspondiente (DEV o PROD)
+
+**Fragmento del workflow CD:**
+
+```yaml
+- name: Build Docker image
+  run: |
+    IMAGE_NAME="${{ secrets.ACR_LOGIN_SERVER }}/chat-service"
+    GIT_TAG=${GITHUB_SHA::7}
+    docker build -t "$IMAGE_NAME:latest" -t "$IMAGE_NAME:$GIT_TAG" .
+
+- name: Deploy container to Azure Web App
+  uses: azure/webapps-deploy@v3
+  with:
+    app-name: ${{ secrets.AZURE_WEBAPP_NAME_PROD }}
+    publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD }}
+    images: ${{ secrets.ACR_LOGIN_SERVER }}/chat-service:latest
+```
+
+**Estrategia de despliegue:**
+
+- **Desarrollo (`develop`)** → Deploy automático a **Azure Web App (DEV)**
+- **Producción (`main`)** → Deploy automático a **Azure Web App (PROD)**
+- **Feature branches** → Deploy a DEV para pruebas antes de fusionar
+
+---
+
+### ☁️ Infraestructura en Azure
+
+El backend está desplegado en la nube de **Microsoft Azure** utilizando los siguientes servicios:
+
+| **Servicio de Azure** | **Propósito** | **Configuración** |
+|-----------------------|---------------|-------------------|
+| **Azure Web App (App Service)** | Hosting del backend Spring Boot en contenedor Docker | Linux, Docker Container, escalable |
+| **Azure Container Registry (ACR)** | Almacenamiento privado de imágenes Docker | Registro privado, integrado con Web App |
+| **MongoDB Atlas** | Base de datos NoSQL en la nube | Cluster compartido, conexión segura |
+| **Application Insights** (opcional) | Monitoreo y telemetría de la aplicación | Logs, métricas, trazas distribuidas |
+
+**Arquitectura de despliegue:**
+
+```
+GitHub Repository (push)
+    ↓
+GitHub Actions (CI/CD Pipeline)
+    ↓
+Azure Container Registry (ACR)
+    ↓
+Azure Web App (App Service)
+    ↓
+MongoDB Atlas (Database)
+```
+
+---
+
+### 🔐 Secrets y Variables de Entorno
+
+Los siguientes **secrets** están configurados en GitHub para el pipeline CI/CD:
+
+| **Secret** | **Descripción** |
+|-----------|-----------------|
+| `ACR_LOGIN_SERVER` | URL del Azure Container Registry (ej: `myregistry.azurecr.io`) |
+| `ACR_USERNAME` | Usuario de autenticación del ACR |
+| `ACR_PASSWORD` | Contraseña del ACR |
+| `AZURE_WEBAPP_NAME_DEV` | Nombre del App Service de desarrollo |
+| `AZURE_WEBAPP_NAME_PROD` | Nombre del App Service de producción |
+| `AZURE_WEBAPP_PUBLISH_PROFILE_DEV` | Perfil de publicación para ambiente DEV |
+| `AZURE_WEBAPP_PUBLISH_PROFILE_PROD` | Perfil de publicación para ambiente PROD |
+| `SONAR_TOKEN` | Token de autenticación para SonarQube/SonarCloud |
+
+---
+
+### 📊 Evidencias
+
+**Azure Web App - Aplicación desplegada**
+   ![Evidencia Azure Web App](./docs/images/AzureChat.png)
+   ![Evidencia Azure Web App Prod](./docs/images/AzureChatProd.png)
 
 
+---
 
-## 13. 🧾 Pruebas coherentes con el porcentaje de cobertura expuesto
+### ✅ Ventajas del pipeline implementado
 
+- 🚀 **Despliegue automático** - Cada commit a `main` se despliega automáticamente a producción
+- 🧪 **Calidad garantizada** - Las pruebas y análisis se ejecutan antes de cada despliegue
+- 🔄 **Rollback rápido** - Versionado de imágenes Docker con hash del commit permite revertir cambios
+- 📦 **Infraestructura como código** - Todo el pipeline está versionado en Git
+- 🔐 **Seguridad** - Credenciales almacenadas de forma segura en GitHub Secrets
+- 📊 **Trazabilidad** - Historial completo de despliegues y pruebas en GitHub Actions
 
+---
 
-## 14. 🚀 Ejecución del Proyecto
-
-
-
-## 15. ☁️ Evidencia de CI/CD y Despliegue en Azure
-
-
-
-## 16. 🤝 Contribuciones y agradecimientos
+## 14. 🤝 Contribuciones
 
 El desarrollo del backend de ECIEXPRESS se realizó aplicando la **metodología ágil Scrum**, promoviendo la colaboración, la mejora continua y la entrega incremental de valor.  
-Durante el proceso, el equipo Amaterasu trabajó en **sprints semanales**, realizando **revisiones de avance**, **dailies** y **retrospectivas**, lo que permitió mantener una comunicación fluida y adaptarse a los cambios de requisitos en tiempo real.
+Durante el proceso, el equipo Tsukuyomi trabajó en **sprints semanales**, realizando **revisiones de avance**, **dailies** y **retrospectivas**, lo que permitió mantener una comunicación fluida y adaptarse a los cambios de requisitos en tiempo real.
 
 Cada miembro del equipo asumió un rol dentro del marco de Scrum:
 
