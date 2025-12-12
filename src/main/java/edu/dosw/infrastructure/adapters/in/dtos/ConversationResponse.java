@@ -11,7 +11,7 @@ import java.util.List;
 public class ConversationResponse {
     private String conversationId;
     private Instant creationDate;
-    private List<String> usersNames;
+    private List<String> usersIds;
     private List<ConversationMessageResponse> messageResponses;
     private String orderId;
 }
