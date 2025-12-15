@@ -29,6 +29,7 @@ public class UserController {
     private final ConversationWebMapper conversationWebMapper;
     private final GetConversationsUseCase getConversationsUseCase;
     private final AddContactUseCase addContactUseCase;
+    private final GetUsernameUseCase getUsernameUseCase;
     private UserRepository userRepository; //borar despues de la prueba junto con /create-testusers
 
     @GetMapping("/{id}/filter/contacts")
@@ -59,4 +60,11 @@ public class UserController {
     public void addContact(@RequestBody AddContactRequest request) {
         addContactUseCase.execute(userWebMapper.toCommand(request));
     }
+
+    @GetMapping("/getUsername")
+    public String getUsername(@RequestParam String userId) {
+        String user = getUsernameUseCase.execute(userId);
+        return user;
+    }
+
 }

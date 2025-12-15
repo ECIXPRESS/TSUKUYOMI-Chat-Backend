@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class CreateConversationRequest {
     private List<String> usersIds;
-    private String orderId;
+    private String orderId = "ORD_9230EC2F";
 }
